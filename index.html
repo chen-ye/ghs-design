@@ -130,7 +130,7 @@ that define starting and ending locations of flight paths
                     .addTo(map);
                     var totalLength = newLine._path.getTotalLength();
                     newLine._path.classList.add('path-start');
-                    if (pairs[i][0][0] == 37.469075 || pairs[i][1][0] == 37.469075) {
+                    if (pairs[i][0][0] != 37.469075 && pairs[i][1][0] != 37.469075) {
                         newLine._path.classList.add('secondary');
                     }
                     // This pair of CSS properties hides the line initially
