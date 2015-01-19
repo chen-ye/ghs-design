@@ -31,16 +31,18 @@ that define starting and ending locations of flight paths
                 -moz-transition:stroke-dashoffset 10s ease-in;
                 -o-transition:stroke-dashoffset 10s ease-in;
                 transition:stroke-dashoffset 10s ease-in;
-                -webkit-animation: flightpath 80s linear normal infinite;
+                -webkit-animation: flightpath 100s linear normal infinite;
 /*                -webkit-animation-delay: 10s;*/
-                animation: flightpath 80s linear normal infinite;
+                animation: flightpath 100s linear normal infinite;
 /*                animation-delay: 10s;*/
             }
             
-            .path-start.secondary {
+            .path-secondary {
+                -webkit-transition:stroke-dashoffset 20s linear;
+                -moz-transition:stroke-dashoffset 20s linear;
+                -o-transition:stroke-dashoffset 20s linear;
+                transition:stroke-dashoffset 20s linear;
                 opacity: .1;
-                animation: none;
-/*                animation: flightpath 160s linear normal infinite;*/
             }
             
             @-webkit-keyframes flightpath {
@@ -130,25 +132,25 @@ that define starting and ending locations of flight paths
                     })
                     .addTo(map);
                     var totalLength = newLine._path.getTotalLength();
-                    newLine._path.classList.add('path-start');
+                    newLine._path.style.strokeDashoffset = totalLength; 
+                    
                     if (pairs[i][0][0] != 37.469075 && pairs[i][1][0] != 37.469075) {
-                        newLine._path.classList.add('secondary');
-                    }
-                    // This pair of CSS properties hides the line initially
-                    // See http://css-tricks.com/svg-line-animation-works/
-                    // for details on this trick.
-                    newLine._path.style.strokeDashoffset = totalLength;
-                    newLine._path.style.strokeDasharray = 1.5 * totalLength;
-                    // Offset the timeout here: setTimeout makes a function
-                    // run after a certain number of milliseconds - in this
-                    // case we want each flight path to be staggered a bit.
-                    setTimeout((function(path) {
-                        return function() {
-                            // setting the strokeDashoffset to 0 triggers
-                            // the animation.
-                            path.style.strokeDashoffset = 0;
-                        };
-                    })(newLine._path), i * 100);
+                        newLine._path.classList.add('path-secondary');
+                        newLine._path.style.strokeDasharray = totalLength;
+                        // Offset the timeout here: setTimeout makes a function
+                        // run after a certain number of milliseconds - in this
+                        // case we want each flight path to be staggered a bit.
+                        setTimeout((function(path) {
+                            return function() {
+                                // setting the strokeDashoffset to 0 triggers
+                                // the animation.
+                                path.style.strokeDashoffset = 0;
+                            };
+                        })(newLine._path), i * 100);
+                    } else {
+                        newLine._path.classList.add('path-start');
+                        newLine._path.style.strokeDasharray = 1.5 * totalLength;
+                    }   
                 }
             }
         </script>
