@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset=utf-8 />
-        <title>Animating flight paths</title>
+        <title>GHS Flight Paths Demo</title>
         <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
         <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.js'></script>
         <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.4/mapbox.css' rel='stylesheet' />
@@ -35,6 +35,11 @@ that define starting and ending locations of flight paths
 /*                -webkit-animation-delay: 10s;*/
                 animation: flightpath 80s linear normal infinite;
 /*                animation-delay: 10s;*/
+            }
+            
+            .path-start .secondary {
+                opacity: .1;
+                animation: flightpath 160s linear normal infinite;
             }
             
             @-webkit-keyframes flightpath {
@@ -101,16 +106,16 @@ that define starting and ending locations of flight paths
                 
                 
                 
-                var filteredPairs = pairs.filter(seoulFilter),
-                    otherPairs = pairs.filter(function(val, i , arr) {return !seoulFilter(val, i , arr)});
+//                var filteredPairs = pairs.filter(seoulFilter),
+//                    otherPairs = pairs.filter(function(val, i , arr) {return !seoulFilter(val, i , arr)});
                 
 
-                for (var i = 0; i < filteredPairs.length; i++) {
+                for (var i = 0; i < pairs.length; i++) {
                     // Transform each pair of coordinates into a pretty
                     // great circle using the Arc.js plugin, as included above.
                     var generator = new arc.GreatCircle(
-                        obj(filteredPairs[i][0]),
-                        obj(filteredPairs[i][1]));
+                        obj(pairs[i][0]),
+                        obj(pairs[i][1]));
                     var line = generator.Arc(100, { offset: 10 });
                     // Leaflet expects [lat,lng] arrays, but a lot of
                     // software does the opposite, including arc.js, so
@@ -125,6 +130,9 @@ that define starting and ending locations of flight paths
                     .addTo(map);
                     var totalLength = newLine._path.getTotalLength();
                     newLine._path.classList.add('path-start');
+                    if (pairs[i][0][0] == 37.469075 || pairs[i][1][0] == 37.469075) {
+                        newLine._path.classList.add('secondary');
+                    }
                     // This pair of CSS properties hides the line initially
                     // See http://css-tricks.com/svg-line-animation-works/
                     // for details on this trick.
